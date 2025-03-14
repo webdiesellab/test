@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup  # Используем KeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup  # Используем KeyboardButton
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
