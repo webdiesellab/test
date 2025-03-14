@@ -29,14 +29,14 @@ async def get_exchange_rate(base_currency: str, target_currency: str):
 
 # Создаём inline кнопки для выбора валют
 def create_currency_menu():
-    keyboard = InlineKeyboardMarkup(row_width=3)
+    # Теперь создаём кнопки
     buttons = [
         InlineKeyboardButton(text="EUR", callback_data="EUR"),
         InlineKeyboardButton(text="USD", callback_data="USD"),
         InlineKeyboardButton(text="MDL", callback_data="MDL"),
     ]
-    # Теперь добавляем кнопки в inline_keyboard как список
-    keyboard.inline_keyboard = [buttons]  # Корректный способ для aiogram 3.x
+    # И передаём их в inline_keyboard
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[buttons])  # Правильное создание клавиатуры
     return keyboard
 
 # Команда /start
