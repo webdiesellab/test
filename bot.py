@@ -29,13 +29,15 @@ async def get_exchange_rate(base_currency: str, target_currency: str):
 
 # Создаём меню с кнопками для выбора валют
 def create_currency_menu():
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)  # Параметры resize_keyboard и one_time_keyboard
-    buttons = [
-        KeyboardButton(text="EUR"),
-        KeyboardButton(text="USD"),
-        KeyboardButton(text="MDL"),
-    ]
-    keyboard.add(*buttons)  # Добавляем кнопки
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="EUR")],
+            [KeyboardButton(text="USD")],
+            [KeyboardButton(text="MDL")],
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=True,
+    )  # Передаем параметры через словарь
     return keyboard
 
 # Команда /start
