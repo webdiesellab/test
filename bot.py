@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup  # Используем KeyboardButton
+from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
@@ -29,13 +29,13 @@ async def get_exchange_rate(base_currency: str, target_currency: str):
 
 # Создаём меню с кнопками для выбора валют
 def create_currency_menu():
-    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)  # Передаем resize_keyboard и one_time_keyboard в параметр
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)  # Параметры resize_keyboard и one_time_keyboard
     buttons = [
         KeyboardButton(text="EUR"),
         KeyboardButton(text="USD"),
         KeyboardButton(text="MDL"),
     ]
-    keyboard.add(*buttons)  # Добавляем кнопки в клавиатуру
+    keyboard.add(*buttons)  # Добавляем кнопки
     return keyboard
 
 # Команда /start
