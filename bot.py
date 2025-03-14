@@ -35,7 +35,8 @@ def create_currency_menu():
         InlineKeyboardButton(text="USD", callback_data="USD"),
         InlineKeyboardButton(text="MDL", callback_data="MDL"),
     ]
-    keyboard.inline_keyboard = [buttons]  # добавляем список кнопок
+    # Теперь добавляем кнопки в inline_keyboard как список
+    keyboard.inline_keyboard = [buttons]  # Корректный способ для aiogram 3.x
     return keyboard
 
 # Команда /start
