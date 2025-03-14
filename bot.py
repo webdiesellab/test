@@ -35,7 +35,7 @@ def create_currency_menu():
         InlineKeyboardButton(text="USD", callback_data="USD"),
         InlineKeyboardButton(text="MDL", callback_data="MDL"),
     ]
-    keyboard.add(*buttons)
+    keyboard.inline_keyboard = [buttons]  # добавляем список кнопок
     return keyboard
 
 # Команда /start
