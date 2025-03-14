@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import Message, ReplyKeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup  # Заменили ReplyKeyboardButton на KeyboardButton
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
@@ -31,9 +31,9 @@ async def get_exchange_rate(base_currency: str, target_currency: str):
 def create_currency_menu():
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = [
-        ReplyKeyboardButton(text="EUR"),
-        ReplyKeyboardButton(text="USD"),
-        ReplyKeyboardButton(text="MDL"),
+        KeyboardButton(text="EUR"),  # Заменили ReplyKeyboardButton на KeyboardButton
+        KeyboardButton(text="USD"),  # Заменили ReplyKeyboardButton на KeyboardButton
+        KeyboardButton(text="MDL"),  # Заменили ReplyKeyboardButton на KeyboardButton
     ]
     keyboard.add(*buttons)
     return keyboard
