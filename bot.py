@@ -57,14 +57,17 @@ async def handle_currency_selection(callback_query: types.CallbackQuery):
     # Получаем курсы выбранной валюты по отношению к другим
     eur_rate = await get_exchange_rate(selected_currency, "EUR")
     usd_rate = await get_exchange_rate(selected_currency, "USD")
+    mdl_rate = await get_exchange_rate(selected_currency, "MDL")
 
-    if eur_rate is None or usd_rate is None:
+    if not all([eur_rate, usd_rate, mdl_rate]):
         await callback_query.answer("Не удалось получить курс для выбранной валюты.")
         return
 
-    response = f"Курс для {selected_currency}:\n"
+    # Формируем ответ с курсами
+    response = f"Курсы для {selected_currency}:\n"
     response += f"1 {selected_currency} = {eur_rate} EUR\n"
-    response += f"1 {selected_currency} = {usd_rate} USD"
+    response += f"1 {selected_currency} = {usd_rate} USD\n"
+    response += f"1 {selected_currency} = {mdl_rate} MDL"
 
     # Отправляем результат
     await callback_query.message.answer(response)
