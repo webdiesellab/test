@@ -26,16 +26,22 @@ async def get_exchange_rate(currency: str):
 
 @dp.message(Command("start"))
 async def start_command(message: Message):
+    logging.info(f"User {message.from_user.id} sent '/start'")
     await message.answer("Привет! Отправь мне код валюты (например, USD, EUR, RUB), и я покажу курс к доллару.")
+    logging.info(f"Bot response: Привет! Отправь мне код валюты...")
 
 @dp.message()
 async def send_exchange_rate(message: Message):
+    logging.info(f"User {message.from_user.id} sent: {message.text}")
     currency = message.text.strip().upper()
     rate = await get_exchange_rate(currency)
     if rate == "Неизвестная валюта":
-        await message.answer("Я не знаю такую валюту. Попробуй USD, EUR, RUB и т.д.")
+        response = "Я не знаю такую валюту. Попробуй USD, EUR, RUB и т.д."
     else:
-        await message.answer(f"1 USD = {rate} {currency}")
+        response = f"1 USD = {rate} {currency}"
+    
+    await message.answer(response)
+    logging.info(f"Bot response: {response}")
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
