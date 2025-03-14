@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup  # Используем KeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup  # Используем KeyboardButton и ReplyKeyboardMarkup
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
@@ -40,7 +40,7 @@ def create_currency_menu():
 
 # Команда /start
 @dp.message(Command("start"))
-async def start_command(message: Message):
+async def start_command(message: types.Message):  # Используем types.Message
     logging.info(f"User {message.from_user.id} sent '/start'")
     await message.answer(
         "Привет! Выберите валюту для получения курса.",
@@ -50,7 +50,7 @@ async def start_command(message: Message):
 
 # Обработчик выбора валюты
 @dp.message()
-async def handle_currency_selection(message: Message):
+async def handle_currency_selection(message: types.Message):  # Используем types.Message
     selected_currency = message.text
     logging.info(f"User {message.from_user.id} selected currency: {selected_currency}")
 
