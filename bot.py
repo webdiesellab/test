@@ -31,13 +31,11 @@ async def get_exchange_rate(base_currency: str, target_currency: str):
 def create_currency_menu():
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="EUR")],
-            [KeyboardButton(text="USD")],
-            [KeyboardButton(text="MDL")],
+            [KeyboardButton(text="EUR"), KeyboardButton(text="USD"), KeyboardButton(text="MDL"), KeyboardButton(text="RUB")],
         ],
         resize_keyboard=True,
         one_time_keyboard=True,
-    )  # Передаем параметры через словарь
+    )
     return keyboard
 
 # Команда /start
@@ -60,8 +58,9 @@ async def handle_currency_selection(message: Message):
     eur_rate = await get_exchange_rate(selected_currency, "EUR")
     usd_rate = await get_exchange_rate(selected_currency, "USD")
     mdl_rate = await get_exchange_rate(selected_currency, "MDL")
+    rub_rate = await get_exchange_rate(selected_currency, "RUB")
 
-    if not all([eur_rate, usd_rate, mdl_rate]):
+    if not all([eur_rate, usd_rate, mdl_rate, rub_rate]):
         await message.answer("Не удалось получить курс для выбранной валюты.")
         return
 
@@ -69,7 +68,8 @@ async def handle_currency_selection(message: Message):
     response = f"Курсы для {selected_currency}:\n"
     response += f"1 {selected_currency} = {eur_rate} EUR\n"
     response += f"1 {selected_currency} = {usd_rate} USD\n"
-    response += f"1 {selected_currency} = {mdl_rate} MDL"
+    response += f"1 {selected_currency} = {mdl_rate} MDL\n"
+    response += f"1 {selected_currency} = {rub_rate} RUB"
 
     # Отправляем результат
     await message.answer(response)
