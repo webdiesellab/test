@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import Message, KeyboardButton, ReplyKeyboardMarkup  # Используем KeyboardButton
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
@@ -27,17 +27,15 @@ async def get_exchange_rate(base_currency: str, target_currency: str):
                 return data["rates"][target_currency]
             return None
 
-# Создаём меню с кнопками для выбора валют
+# Создаем меню с кнопками для выбора валют
 def create_currency_menu():
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="EUR")],
-            [KeyboardButton(text="USD")],
-            [KeyboardButton(text="MDL")],
-        ],
-        resize_keyboard=True,
-        one_time_keyboard=True,
-    )  # Передаем параметры через словарь
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)  # Передаем resize_keyboard и one_time_keyboard в параметр
+    buttons = [
+        KeyboardButton(text="EUR"),  # Кнопка для евро
+        KeyboardButton(text="USD"),  # Кнопка для доллара
+        KeyboardButton(text="MDL"),  # Кнопка для молдавского лея
+    ]
+    keyboard.row(*buttons)  # Добавляем кнопки в одну строку
     return keyboard
 
 # Команда /start
@@ -58,26 +56,4 @@ async def handle_currency_selection(message: Message):
 
     # Получаем курсы выбранной валюты по отношению к другим
     eur_rate = await get_exchange_rate(selected_currency, "EUR")
-    usd_rate = await get_exchange_rate(selected_currency, "USD")
-    mdl_rate = await get_exchange_rate(selected_currency, "MDL")
-
-    if not all([eur_rate, usd_rate, mdl_rate]):
-        await message.answer("Не удалось получить курс для выбранной валюты.")
-        return
-
-    # Формируем ответ с курсами
-    response = f"Курсы для {selected_currency}:\n"
-    response += f"1 {selected_currency} = {eur_rate} EUR\n"
-    response += f"1 {selected_currency} = {usd_rate} USD\n"
-    response += f"1 {selected_currency} = {mdl_rate} MDL"
-
-    # Отправляем результат
-    await message.answer(response)
-
-# Главная функция для запуска
-async def main():
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+    usd_rate = await get_exchange_rate(
