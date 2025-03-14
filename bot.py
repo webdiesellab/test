@@ -64,16 +64,17 @@ async def handle_currency_selection(message: Message):
         await message.answer("Не удалось получить курс для выбранной валюты.")
         return
 
-    # Формируем ответ с курсами, исключая курс к самой себе
+    # Формируем ответ с обратными курсами
     response = f"Курсы для {selected_currency}:\n"
-    if selected_currency != "EUR":
-        response += f"1 {selected_currency} = {eur_rate} EUR\n"
-    if selected_currency != "USD":
-        response += f"1 {selected_currency} = {usd_rate} USD\n"
-    if selected_currency != "MDL":
-        response += f"1 {selected_currency} = {mdl_rate} MDL\n"
-    if selected_currency != "RUB":
-        response += f"1 {selected_currency} = {rub_rate} RUB"
+    
+    if selected_currency != "EUR" and eur_rate:
+        response += f"1 EUR = {1 / eur_rate} {selected_currency}\n"
+    if selected_currency != "USD" and usd_rate:
+        response += f"1 USD = {1 / usd_rate} {selected_currency}\n"
+    if selected_currency != "MDL" and mdl_rate:
+        response += f"1 MDL = {1 / mdl_rate} {selected_currency}\n"
+    if selected_currency != "RUB" and rub_rate:
+        response += f"1 RUB = {1 / rub_rate} {selected_currency}"
 
     # Отправляем результат
     await message.answer(response)
