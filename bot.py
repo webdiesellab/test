@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import Message, ReplyKeyboardButton, ReplyKeyboardMarkup
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
@@ -27,16 +27,15 @@ async def get_exchange_rate(base_currency: str, target_currency: str):
                 return data["rates"][target_currency]
             return None
 
-# Создаём inline кнопки для выбора валют
+# Создаём меню с кнопками для выбора валют
 def create_currency_menu():
-    # Теперь создаём кнопки
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = [
-        InlineKeyboardButton(text="EUR", callback_data="EUR"),
-        InlineKeyboardButton(text="USD", callback_data="USD"),
-        InlineKeyboardButton(text="MDL", callback_data="MDL"),
+        ReplyKeyboardButton(text="EUR"),
+        ReplyKeyboardButton(text="USD"),
+        ReplyKeyboardButton(text="MDL"),
     ]
-    # И передаём их в inline_keyboard
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[buttons])  # Правильное создание клавиатуры
+    keyboard.add(*buttons)
     return keyboard
 
 # Команда /start
@@ -50,10 +49,10 @@ async def start_command(message: Message):
     logging.info(f"Bot response: Привет! Выберите валюту...")
 
 # Обработчик выбора валюты
-@dp.callback_query()
-async def handle_currency_selection(callback_query: types.CallbackQuery):
-    selected_currency = callback_query.data
-    logging.info(f"User {callback_query.from_user.id} selected currency: {selected_currency}")
+@dp.message()
+async def handle_currency_selection(message: Message):
+    selected_currency = message.text
+    logging.info(f"User {message.from_user.id} selected currency: {selected_currency}")
 
     # Получаем курсы выбранной валюты по отношению к другим
     eur_rate = await get_exchange_rate(selected_currency, "EUR")
@@ -61,7 +60,7 @@ async def handle_currency_selection(callback_query: types.CallbackQuery):
     mdl_rate = await get_exchange_rate(selected_currency, "MDL")
 
     if not all([eur_rate, usd_rate, mdl_rate]):
-        await callback_query.answer("Не удалось получить курс для выбранной валюты.")
+        await message.answer("Не удалось получить курс для выбранной валюты.")
         return
 
     # Формируем ответ с курсами
@@ -71,8 +70,7 @@ async def handle_currency_selection(callback_query: types.CallbackQuery):
     response += f"1 {selected_currency} = {mdl_rate} MDL"
 
     # Отправляем результат
-    await callback_query.message.answer(response)
-    await callback_query.answer()
+    await message.answer(response)
 
 # Главная функция для запуска
 async def main():
